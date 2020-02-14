@@ -3,6 +3,11 @@ body {
 	background: #f0f1f2;
 	font:12px "Open Sans", sans-serif; 
 }
+
+p.italic{
+	font-style: italic;
+}
+
 #view-code{
   color:#89a2b5;    
   opacity:0.7;
@@ -76,7 +81,7 @@ body {
 .friend p{
 	padding:15px 0 0 0;			
 	float:left;
-	width:220px;
+	max-width:350px;
 }
 .friend p strong{
   font-weight:600;
@@ -199,16 +204,24 @@ body {
 	width:500px;
 	display:block;	
 }
-#chat-messages div.message{
+div.message{
 	padding:0 0 30px 58px;
 	clear:both;
 	margin-bottom:15px;
 }
-#chat-messages div.message.right{
+
+div.message.right{
 	  padding: 0 58px 30px 0;
 	  margin-right: -19px;
 	  margin-left: 19px;
 }
+
+#chat-messages div.message.not-last{
+	padding:0 0 10px 58px;
+	clear:both;
+	margin-bottom:0px;
+}
+
 #chat-messages .message img{
 	  float: left;
 	  margin-left: -38px;
@@ -238,7 +251,8 @@ body {
 }
 #chat-messages div.message.right .bubble{
 	float:right;
-	border-radius:5px 5px 0px 5px ;
+	border-radius:5px 5px 0px 5px;
+	word-wrap: break-word;
 }
 .bubble .corner{
 	background:url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/bubble-corner.png") 0 0 no-repeat;

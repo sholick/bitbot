@@ -1,5 +1,17 @@
+
+var updateTimeLogs = function(){
+    	$( "span.timelog" ).each(function( index ){
+    		date = $( this ).data( 'time' );
+    		$( this ).html(moment.unix(date).fromNow(true));
+    	});
+    }
+
 $(document).ready(function(){
-	
+
+	//Date indicator
+	timeNow = moment(new Date()).format("ddd ha");
+	$("label#dateIndicator").html(timeNow);
+
   var preloadbg = document.createElement("img");
   preloadbg.src = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/timeline1.png";
   
@@ -30,6 +42,9 @@ $(document).ready(function(){
 	
 	$(".friend").each(function(){		
 		$(this).click(function(){
+
+			submit_message("Hi");
+
 			var childOffset = $(this).offset();
 			var parentOffset = $(this).parent().parent().offset();
 			var childTop = childOffset.top - parentOffset.top;
@@ -82,29 +97,50 @@ $(document).ready(function(){
 
 	function submit_message(message) {
         $.post( "/send_message", {message: message}, handle_response);
+
         function handle_response(data) {
+        	var len = data.message.length;
+        	$.each(data.message, function( key, value){
+        		setTimeout(function(){
+        			$("#loading").remove();
+        			timeNow = moment(new Date()).unix();
+        			if (key!=len-1){
+	        			var latestchat = $(`
+		            <div class="message not-last"><img src="static/logo.png" /><div class="bubble">
+		                		<p>${value}</p>
+		               <div class="corner"></div></div></div>
+		               <div class="message not-last" id="loading">
+		                    <img src="static/logo.png" />
+		                    <div class="bubble">
+		                		<b>...</b>
+		                	<div class="corner"></div>
+		                        <span>typing</span>
+		                    </div>
+		            </div>`).appendTo('#chat-messages');
+	        		}
+	        		else {
+	        			var latestchat = $(`
+				            <div class="message"><img src="static/logo.png" /><div class="bubble">
+				                		<p>${value}</p>
+				            <div class="corner"></div>
+				            <span class="timelog" data-time=${timeNow}></span></div></div>
+	        		`).appendTo('#chat-messages');
+	        		updateTimeLogs();
+	        		}
+	        		$('#chat-messages').animate({
+        				scrollTop: $('#chat-messages')[0].scrollHeight
+        			}, 400);
+        		}, 800*key);
+        	});
 
-          $("#loading").remove();
-
-          var latestchat = $(`
-            <div class="message">
-                    <img src="static/logo.png" />
-                    <div class="bubble">
-                		<p>${data.message}</p>
-                	<div class="corner"></div>
-                        <span>1 min</span>
-                    </div>
-            </div>
-        `).appendTo('#chat-messages');
-
-          $('#chat-messages').animate({
-        	scrollTop: $('#chat-messages')[0].scrollHeight
-        }, 500);
           
         }
     }
 
-	var send_message = function(e){
+	var send_message = function(e, displayinput = true){
+
+		timeNow = moment(new Date()).unix();
+
         e.preventDefault();
         const input_message = $('#chatInput').val()
 
@@ -115,17 +151,19 @@ $(document).ready(function(){
         if (!input_message) {
           return
         }
-
-        $('#chat-messages').append(`
+        if(displayinput){
+        	$('#chat-messages').append(`
             <div class="message right">
                     <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/2_copy.jpg" />
                     <div class="bubble">
                 		${input_message}
             			<div class="corner"></div>
-                        <span>1 min</span>
+                        <span class="timelog" data-time=${timeNow}></span>
                     </div>
             </div>
         `)
+        }
+        
 
         // loading 
         var latestchat = $(`
@@ -134,24 +172,17 @@ $(document).ready(function(){
                     <div class="bubble">
                 		<b>...</b>
                 	<div class="corner"></div>
-                        <span>1 min</span>
+                        <span>typing</span>
                     </div>
             </div>
         `).appendTo('#chat-messages');
 
-
-
-        //scroll to bottom
-        var box = $('.message').last();
-        if(box){
-        	//$('#chat-messages').scrollTop(box.position().top);
-        }
         $('#chat-messages').animate({
         	scrollTop: $('#chat-messages')[0].scrollHeight
         }, 1000);
 
-        // send the message
-        //submit_message(input_message)
+        updateTimeLogs();
+
     }
 
     $('#send').on('click', function(e){
@@ -161,6 +192,7 @@ $(document).ready(function(){
     	send_message(e)
     });
 
+    setInterval(updateTimeLogs, 4000);
 
 
 });

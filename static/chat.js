@@ -6,8 +6,22 @@ var updateTimeLogs = function(){
     	});
     }
 
+moment.updateLocale('en', {
+	relativeTime : {
+		s: 'just now',
+		ss: '%ssec',
+		m: 'a min',
+		mm: '%d min',
+		h: 'an hour',
+		hh: '%d hr',
+		d: 'a day',
+		dd: '%d days'
+	}
+})
+
 $(document).ready(function(){
 
+	started = false;
 	//Date indicator
 	timeNow = moment(new Date()).format("ddd ha");
 	$("label#dateIndicator").html(timeNow);
@@ -43,7 +57,11 @@ $(document).ready(function(){
 	$(".friend").each(function(){		
 		$(this).click(function(){
 
-			submit_message("Hi");
+			if (!started){
+				submit_message("Hi");
+				started = true;
+			}
+			else submit_message("I am back");
 
 			var childOffset = $(this).offset();
 			var parentOffset = $(this).parent().parent().offset();
@@ -96,9 +114,12 @@ $(document).ready(function(){
 	});
 
 	function submit_message(message) {
-        $.post( "/send_message", {message: message}, handle_response);
+        if ($.post( "/send_message", {message: message}, handle_response).dianostic_info){
+        	console.log("Yes we foudn something");
+        };
 
         function handle_response(data) {
+        	console.log(data);
         	var len = data.message.length;
         	$.each(data.message, function( key, value){
         		setTimeout(function(){
@@ -106,11 +127,11 @@ $(document).ready(function(){
         			timeNow = moment(new Date()).unix();
         			if (key!=len-1){
 	        			var latestchat = $(`
-		            <div class="message not-last"><img src="static/logo.png" /><div class="bubble">
+		            <div class="message not-last"><img src="static/logo.png" class='icon' /><div class="bubble">
 		                		<p>${value}</p>
 		               <div class="corner"></div></div></div>
 		               <div class="message not-last" id="loading">
-		                    <img src="static/logo.png" />
+		                    <img class='icon' src="static/logo.png" />
 		                    <div class="bubble">
 		                		<b>...</b>
 		                	<div class="corner"></div>
@@ -120,7 +141,7 @@ $(document).ready(function(){
 	        		}
 	        		else {
 	        			var latestchat = $(`
-				            <div class="message"><img src="static/logo.png" /><div class="bubble">
+				            <div class="message"><img src="static/logo.png" class='icon'/><div class="bubble">
 				                		<p>${value}</p>
 				            <div class="corner"></div>
 				            <span class="timelog" data-time=${timeNow}></span></div></div>
@@ -130,7 +151,7 @@ $(document).ready(function(){
 	        		$('#chat-messages').animate({
         				scrollTop: $('#chat-messages')[0].scrollHeight
         			}, 400);
-        		}, 800*key);
+        		}, 1000*key);
         	});
 
           
@@ -154,7 +175,7 @@ $(document).ready(function(){
         if(displayinput){
         	$('#chat-messages').append(`
             <div class="message right">
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/2_copy.jpg" />
+                    <img class='icon' src="static/avatar.png" />
                     <div class="bubble">
                 		${input_message}
             			<div class="corner"></div>
@@ -168,7 +189,7 @@ $(document).ready(function(){
         // loading 
         var latestchat = $(`
             <div class="message" id="loading">
-                    <img src="static/logo.png" />
+                    <img class='icon' src="static/logo.png" />
                     <div class="bubble">
                 		<b>...</b>
                 	<div class="corner"></div>

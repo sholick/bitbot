@@ -1,6 +1,8 @@
 # bitbot
 Cryptocurrency assistant, providing price checking, momentum analysis, and trade trigger services
 
+In order for this bot to function correctly, you need to obtain an API key for both coingecko.com and coinmarketcap.com.
+After doing so, you can place the API keys in the respective positions of the folder.
 
 Diagflow agent linking:
 1) Access keys has to be downloaded in placed into the main directory.

@@ -24,12 +24,13 @@ p.italic{
 	width:500px;
 	background:#fff;
 	border-radius:6px;
-	overflow:hidden;
-	height:600px;
+	height: calc(90% - 50px);
 	position:absolute;
 	top:50px;
 	left:50%;
 	margin-left:-260px;
+	min-height: 450px;
+	max-height: 90%;
 }
 
 #friendslist{
@@ -37,10 +38,11 @@ p.italic{
 	top:0;
 	left:0;
 	width:500px;
-	height:484px;
+	height:100%;
 }
 #topmenu{
-	height:69px;
+	height:150px;
+	background: grey;
 	width:500px;
 	border-bottom:1px solid #d8dfe3;	
 }
@@ -128,7 +130,7 @@ p.italic{
 }
 #chatview{
 	width:500px;
-	height:600px;
+	height:100%;
 	position:absolute;
 	top:0;
 	left:0;	
@@ -181,7 +183,7 @@ p.italic{
 	opacity:0;
 	margin-top:30px;
 	width:500px;
-	height:350px;
+	height: calc(100% - 260px);
 	overflow-y:scroll;	
 	overflow-x:hidden;
 	padding-right: 20px;
@@ -222,21 +224,28 @@ div.message.right{
 	margin-bottom:0px;
 }
 
-#chat-messages .message img{
+#chat-messages .message img.icon{
 	  float: left;
 	  margin-left: -38px;
 	  border-radius: 50%;
 	  width: 30px;
 	  margin-top: 12px;
 }
-#chat-messages div.message.right img{
+#chat-messages div.message.right img.icon{
 	float: right;	
     margin-left: 0;
 	margin-right: -38px;	
 }
+
+#chat-messages .message h3{
+	font-weight: bold;
+	font-size:16px;
+	line-height:30px;
+}
+
 .message{
 	display:block;
-	overflow:auto;
+	overflow:hidden;
 }
 .message .bubble{	
 	background:#f0f4f7;
@@ -247,7 +256,8 @@ div.message.right{
 	color:#8495a3;
 	position:relative;
 	float:left;
-	max-width:350px;
+	max-width:300px;
+	min-width:20px;
 }
 #chat-messages div.message.right .bubble{
 	float:right;
@@ -404,4 +414,35 @@ div.message.right .corner{
 #chatview, #sendmessage { 
 overflow:hidden; 
 border-radius:6px; 
+}
+
+img.crixlogo{
+	margin-right:5px;
+	height:15px;
+	width:auto;
+}
+
+.chartContainer{
+  overflow: hidden;
+  width: 300px;
+  height: 230px;
+  padding-top:20px;
+  padding-bottom:5px;
+}
+
+p.note{
+	font-size: 0.7em;
+}
+
+div#footnote{
+	position:relative;
+	top:100%;
+	text-align: right;
+	color: #8495a3;
+	font-size: 0.8em;
+	padding: 5px;
+}
+#footnote a{
+	text-decoration: none;
+	color: #8495a3;
 }

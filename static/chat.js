@@ -6,6 +6,12 @@ var updateTimeLogs = function(){
     	});
     }
 
+function genChartID(){
+	time = moment(new Date()).unix().toString;
+	generated = "__createChart_" + time;
+	return generated;
+}
+
 moment.updateLocale('en', {
 	relativeTime : {
 		s: 'just now',
@@ -90,7 +96,7 @@ $(document).ready(function(){
 			$("#profile p").html(name);
 			$("#profile span").html(email);			
 			
-			$(".message").not(".right").find("img").attr("src", $(clone).attr("src"));									
+			//$(".message").not(".right").find("img").attr("src", $(clone).attr("src"));									
 			$('#friendslist').fadeOut();
 			$('#chatview').fadeIn();
 		
@@ -121,6 +127,7 @@ $(document).ready(function(){
         function handle_response(data) {
         	console.log(data);
         	var len = data.message.length;
+        	var params = data.parameters;
         	$.each(data.message, function( key, value){
         		setTimeout(function(){
         			$("#loading").remove();
@@ -140,13 +147,34 @@ $(document).ready(function(){
 		            </div>`).appendTo('#chat-messages');
 	        		}
 	        		else {
-	        			var latestchat = $(`
-				            <div class="message"><img src="static/logo.png" class='icon'/><div class="bubble">
-				                		<p>${value}</p>
-				            <div class="corner"></div>
-				            <span class="timelog" data-time=${timeNow}></span></div></div>
-	        		`).appendTo('#chat-messages');
-	        		updateTimeLogs();
+	        			if (value.startsWith('Chart__PloT__')){
+	        				//var timestamp = moment(new Date()).unix().toString()
+	        				var plotTime = genChartID();
+	        				console.log(plotTime)
+
+	        				divided = value.split("__")
+	        				value = divided[4].split(',');
+
+	        				var latestchat = $(`
+					            <div class="message"><img src="static/logo.png" class='icon'/><div class="bubble">
+					                		<p>The following graph shows the price of <strong>${divided[2]}</strong> in the past <i>${divided[3]}</i> :</p>
+					                		<div class="chartContainer" id="${timeNow}"></div>
+					                		<p class="note">Note: We assume no responsibility to data presented.</p>
+					            <div class="corner"></div>
+					            <span class="timelog" data-time=${timeNow}></span></div></div>
+	        				`).appendTo('#chat-messages');
+
+	        				createChart(value, timeNow);
+	        			}
+	        			else {
+	        				var latestchat = $(`
+					            <div class="message"><img src="static/logo.png" class='icon'/><div class="bubble">
+					                		<p>${value}</p>
+					            <div class="corner"></div>
+					            <span class="timelog" data-time=${timeNow}></span></div></div>
+	        				`).appendTo('#chat-messages');
+	        			}
+	        			updateTimeLogs();
 	        		}
 	        		$('#chat-messages').animate({
         				scrollTop: $('#chat-messages')[0].scrollHeight
@@ -160,9 +188,10 @@ $(document).ready(function(){
 
 	var send_message = function(e, displayinput = true){
 
-		timeNow = moment(new Date()).unix();
+		e.preventDefault();
+		if ($('#loading').length) return;
 
-        e.preventDefault();
+		timeNow = moment(new Date()).unix();
         const input_message = $('#chatInput').val()
 
         // clear the text input 
@@ -215,5 +244,6 @@ $(document).ready(function(){
 
     setInterval(updateTimeLogs, 4000);
 
+    createChart([1,2,3], "createChart");
 
 });

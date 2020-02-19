@@ -13,8 +13,8 @@ More features coming soon!
 2. Trade functionality on Binance using personal credentials
 3. Setting up price alert and watchlist
 
-To receive dialogflow webhooks, you will need a working domain to receive and send the API calls.
-If you don't have one, try [ngrok.io](ngrok.io)
+To receive dialogflow webhooks, you will need a working domain to receive and send the API calls.<br/>
+If you don't have one, try [ngrok.io](https://ngrok.io) for free.
 
 **See it in action!** [Click here](https://chanvictor.io)<br/>
 

@@ -9,8 +9,9 @@ More features coming soon!
 3. Price Chart plotting for certain period of time
 <br/><br/>
 **Upcoming plans:**
-1. Trade functionality on Binance using personal credentials
-2. Setting up price alert and watchlist
+1. Google Assistant integration
+2. Trade functionality on Binance using personal credentials
+3. Setting up price alert and watchlist
 
 To receive dialogflow webhooks, you will need a working domain to receive and send the API calls.
 If you don't have one, try [ngrok.io](ngrok.io)

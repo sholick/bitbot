@@ -1,0 +1,279 @@
+ <!-- /templates/intro.html -->
+<head>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet">
+  <link href="https://use.typekit.net/qrg0pyh.css" rel="stylesheet">
+  <style>
+  *{
+  margin: 0;
+}
+
+body{
+  background-color: #efe6e1;
+  font-family: paralucent, sans-serif;
+  font-family: quiroh, sans-serif;
+  font-family: mr-eaves-xl-sans, sans-serif;
+}
+
+div.content{
+  margin: 50px;
+  text-align: center;
+}
+
+div.section{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: auto;
+  min-height: 100px;
+  flex-direction: row;
+}
+
+div.section:first-of-type {
+  margin-top:80px;
+}
+div.head{
+  width: 50%;
+  float: left;
+  text-align: right;
+  padding: 20px;
+  font-size: 80px;
+  opacity: 0.7;
+  letter-spacing: -1px;
+  color: #b07656;
+}
+div._body{
+  padding: 15px;
+  float: left;
+  font-size: 30px;
+  line-height: 42px;
+  letter-spacing: 1px;
+  vertical-align: middle;
+  font-family: paralucent, sans-serif;
+  height: 100%;
+  width: 50%;
+  text-align: left;
+}
+span.interests{
+  font-size: 0.6em;
+}
+span.interests i{
+  font-size: 30px;
+}
+span.withcoffee{
+  font-size: 0.7em;
+}
+
+div.section h3{
+  margin-top: 80px;
+  margin-bottom: 10px;
+  font-size: 80px;
+  color: #b07656;
+  font-weight: 300;
+  opacity: 0.6;
+  font-family: paralucent, sans-serif;
+}
+div.workblock{
+  width: 200px;
+  height: 200px;
+  float: left;
+  background-color: white;
+  margin: 15px;
+}
+div._row{
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  display: flex;
+}
+div.workrow{
+  flex-direction: column;
+  display: flex;
+  text-align: center;
+}
+
+svg {
+  top: 0;
+  left: 0;
+}
+
+svg line {
+  stroke-width: 10;
+  stroke: #b07656;
+  opacity: 0.6;
+  fill: none;
+  stroke-dasharray: 200;
+  -webkit-transition: all 0.8s;
+  transition: transform 0.8s, opacity 0.4s;
+}
+
+.workblock:hover svg line{
+  opacity: 1;
+}
+.workblock:hover svg line.top {
+  -webkit-transform: translateX(-400px);
+  transform: translateX(-400px);
+}
+
+.workblock:hover svg line.bottom {
+  -webkit-transform: translateX(400px);
+  transform: translateX(400px);
+}
+
+.workblock:hover svg line.left {
+  -webkit-transform: translateY(400px);
+  transform: translateY(400px);
+}
+
+.workblock:hover svg line.right {
+  -webkit-transform: translateY(-400px);
+  transform: translateY(-400px);
+}
+
+i.contacticons{
+  font-size: 19px;
+  width: 100px;
+}
+
+.fab, .fas{
+  margin: 10px;
+}
+
+._row a{
+color: #000;
+}
+
+div.content p.end{
+  margin-top: 80px;
+}
+
+
+._notes p{
+  width: 200px;
+  margin: 15px;
+  margin-top: 5px;
+}
+#cuhkblock{
+  background: url("{{ url_for('static', filename='final_cuhk.png') }}") no-repeat;
+}
+
+#botblock{
+  background: url("{{ url_for('static', filename='final_bot.jpg') }}") no-repeat;
+  background-size: cover;
+}
+#twlblock{
+  background: url("{{ url_for('static', filename='final_twl.jpg') }}") no-repeat;
+}
+</style>
+</head>
+<body>
+  <div class="content">
+
+    <div class='section'>
+      <div class="head">
+        <span>Victor</span>
+      </div>
+      <div class="_body">
+        <span>is a student.<br/>
+        He drinks <u>coffee</u>.<br/>
+        AND codes stuff.</span>
+      </div>
+    </div>
+
+    <div class='section'>
+      <div class="head">
+        <span>Hobby</span>
+      </div>
+      <div class="_body">
+        <span>enjoys reading,<br/>
+        <u>code</u> <span class="withcoffee">(with &#x2615;)</span>,<br/>
+        and city photography.</span>
+      </div>
+    </div>
+
+    <div class='section'>
+      <div class="head">
+        <span>Interest</span>
+      </div>
+      <div class="_body">
+        <span class="interests">in <i>neural networks</i>,<br/>
+        <i>smart contracts</i>, and<br/>
+        <i>robotics</i>.</span>
+      </div>
+    </div>
+
+    <div class='section'>
+      <div class="head">
+        <span>Code</span>
+      </div>
+      <div class="_body">
+        <span>&#10084; Python<br/>
+        Javascript<br/>
+        C  C++<br/>
+        Go</span>
+      </div>
+    </div>
+    
+    <div class='section workrow'>
+      <h3>
+        Work
+      </h3>
+    <div class="_row">
+    <a href="http://www2.bschool.cuhk.edu.hk/program/undergraduate/" target="_blank">
+      <div class="workblock" id="cuhkblock">
+        <svg width="200" height="200">
+            <line class="top" x1="0" y1="0" x2="600" y2="0"/>
+            <line class="left" x1="0" y1="200" x2="0" y2="-400"/>
+            <line class="bottom" x1="200" y1="200" x2="-400" y2="200"/>
+            <line class="right" x1="200" y1="0" x2="200" y2="600"/>
+        </svg>
+      </div>
+    </a>
+    <a href="https://chanvictor.io" target="_blank">
+      <div class="workblock" id="botblock">
+        <svg width="200" height="200">
+            <line class="top" x1="0" y1="0" x2="600" y2="0"/>
+            <line class="left" x1="0" y1="200" x2="0" y2="-400"/>
+            <line class="bottom" x1="200" y1="200" x2="-400" y2="200"/>
+            <line class="right" x1="200" y1="0" x2="200" y2="600"/>
+        </svg>
+      </div>
+      </a>
+      <a href="https://truewireless.hk/fitbit/en/" target="_blank">
+      <div class="workblock" id="twlblock">
+        <svg width="200" height="200">
+            <line class="top" x1="0" y1="0" x2="600" y2="0"/>
+            <line class="left" x1="0" y1="200" x2="0" y2="-400"/>
+            <line class="bottom" x1="200" y1="200" x2="-400" y2="200"/>
+            <line class="right" x1="200" y1="0" x2="200" y2="600"/>
+        </svg>
+      </div>
+      </a>
+    </div>
+    <div class="_row _notes">
+      <p>
+       Developer team
+      </p>
+      <p>
+       My own Project
+      </p>
+      <p>
+       Developer team
+      </p>
+      </div>
+  </div>
+    <div class='section workrow'>
+      <h3>
+        Contact
+      </h3>
+    <div class="_row">
+      <a href="https://www.linkedin.com/in/victor-chan-0b7b631a2/" target="_blank"><i class="fab fa-linkedin fa-4x"></i></a>
+      <a href="mailto:chanvictoryathong@gmail.com" target="_blank"><i class="fas fa-at fa-4x"></i></a>
+      <a href="https://github.com/sholick" target="_blank"><i class="fab fa-github fa-4x"></i></a>
+      
+    </div>
+    </div>
+    <p class='end'>
+    Coded from scratch by Victor
+    </p>
+  </div>
+</body>

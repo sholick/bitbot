@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 import os
-import dialogflow
+import dialogflow_v2
 import requests
 import json
 import pusher
@@ -8,6 +8,7 @@ import math
 
 application = Flask(__name__)
 app = application
+dialogflow = dialogflow_v2
 
 CMC_key = "48ed09a4-e701-4524-883b-93962eb66652"
 CMC_symbols = []
@@ -240,10 +241,13 @@ def switch_cases():
 
 		return jsonify(reply)
 
-def detect_intent_texts(project_id, session_id, text, language_code):
-    session_client = dialogflow.SessionsClient()
-    session = session_client.session_path(project_id, session_id)
-    #print(session,"\n")
+
+def detect_intent_texts(project_name, session_id, text, language_code):
+
+    projectID = os.getenv("PROJECT_ID_" + project_name)
+    session_client = dialogflow.SessionsClient.from_service_account_file(filename = os.getenv(project_name))
+    session = session_client.session_path(projectID, session_id)
+	#print(session,"\n")
 
     if text:
        text_input = dialogflow.types.TextInput(text=text, language_code=language_code)
@@ -260,11 +264,13 @@ def detect_intent_texts(project_id, session_id, text, language_code):
 def send_message():
 
     message = request.form['message']
-    project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
-    key_name = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-    #print(key_name)
-    fulfillment_messages = detect_intent_texts(project_id, "001", message, 'en')
+    projectName = request.form['to']
+    fulfillment_messages = detect_intent_texts(projectName, "001", message, 'en')
     response_text = { "message":  fulfillment_messages }
 
     return jsonify(response_text), 200
 
+
+@app.route('/sholick')
+def resume():
+	return render_template('intro.html')

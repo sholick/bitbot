@@ -27,7 +27,10 @@ moment.updateLocale('en', {
 
 $(document).ready(function(){
 
-	started = false;
+	var started = {
+		c001: false,
+		c002: false
+	};
 	//Date indicator
 	timeNow = moment(new Date()).format("ddd ha");
 	$("label#dateIndicator").html(timeNow);
@@ -63,23 +66,27 @@ $(document).ready(function(){
 	$(".friend").each(function(){		
 		$(this).click(function(){
 
-			if (!started){
-				submit_message("Hi");
-				started = true;
+
+			var id_to_display = $(this).data('chatid');
+
+			if (! started[id_to_display]){
+				submit_message("Hi", '#' + id_to_display);
+				started[id_to_display] = true;
 			}
-			else submit_message("I am back");
+			else submit_message("I am back", '#' + id_to_display);
 
 			var childOffset = $(this).offset();
 			var parentOffset = $(this).parent().parent().offset();
 			var childTop = childOffset.top - parentOffset.top;
 			var clone = $(this).find('img').eq(0).clone();
 			var top = childTop+12+"px";
+			console.log(id_to_display);
 			
 			$(clone).css({'top': top}).addClass("floatingImg").appendTo("#chatbox");									
 			
 			setTimeout(function(){$("#profile p").addClass("animate");$("#profile").addClass("animate");}, 100);
 			setTimeout(function(){
-				$("#chat-messages").addClass("animate");
+				$("#" + id_to_display).addClass("animate");
 				$('.cx, .cy').addClass('s1');
 				setTimeout(function(){$('.cx, .cy').addClass('s2');}, 100);
 				setTimeout(function(){$('.cx, .cy').addClass('s3');}, 200);			
@@ -92,17 +99,21 @@ $(document).ready(function(){
 			}, 200);
 			
 			var name = $(this).find("p strong").html();
-			var email = $(this).find("p span").html();														
+			var email = $(this).find("p span").html();
+																	
 			$("#profile p").html(name);
-			$("#profile span").html(email);			
+			$("#profile span").html(email);
+			$('#sendmessage').data("tochat", id_to_display);			
 			
-			//$(".message").not(".right").find("img").attr("src", $(clone).attr("src"));									
+			//$(".message").not(".right").find("img").attr("src", $(clone).attr("src"));
+			$('.chat-messages').hide();									
 			$('#friendslist').fadeOut();
 			$('#chatview').fadeIn();
+			$('#' + id_to_display).fadeIn();
 		
 			
 			$('#close').unbind("click").click(function(){				
-				$("#chat-messages, #profile, #profile p").removeClass("animate");
+				$(".chat-messages, #profile, #profile p").removeClass("animate");
 				$('.cx, .cy').removeClass("s1 s2 s3");
 				$('.floatingImg').animate({
 					'width': "40px",
@@ -119,10 +130,15 @@ $(document).ready(function(){
 		});
 	});
 
-	function submit_message(message) {
-        if ($.post( "/send_message", {message: message}, handle_response).dianostic_info){
-        	console.log("Yes we foudn something");
-        };
+	function icon(chatID){
+		if (chatID=="#c001") return "static/logo.png"
+		else return "static/myAvatar.png"
+	}
+
+	function submit_message(message, chatID) {
+
+
+        $.post( "/send_message", {message: message, to : chatID.substr(1)}, handle_response);
 
         function handle_response(data) {
         	console.log(data);
@@ -134,17 +150,17 @@ $(document).ready(function(){
         			timeNow = moment(new Date()).unix();
         			if (key!=len-1){
 	        			var latestchat = $(`
-		            <div class="message not-last"><img src="static/logo.png" class='icon' /><div class="bubble">
+		            <div class="message not-last"><img src=${icon(chatID)} class='icon' /><div class="bubble">
 		                		<p>${value}</p>
 		               <div class="corner"></div></div></div>
 		               <div class="message not-last" id="loading">
-		                    <img class='icon' src="static/logo.png" />
+		                    <img class='icon' src=${icon(chatID)} />
 		                    <div class="bubble">
 		                		<b>...</b>
 		                	<div class="corner"></div>
 		                        <span>typing</span>
 		                    </div>
-		            </div>`).appendTo('#chat-messages');
+		            </div>`).appendTo(chatID);
 	        		}
 	        		else {
 	        			if (value.startsWith('Chart__PloT__')){
@@ -156,28 +172,28 @@ $(document).ready(function(){
 	        				value = divided[4].split(',');
 
 	        				var latestchat = $(`
-					            <div class="message"><img src="static/logo.png" class='icon'/><div class="bubble">
+					            <div class="message"><img src=${icon(chatID)} class='icon'/><div class="bubble">
 					                		<p>The following graph shows the price of <strong>${divided[2]}</strong> in the past <i>${divided[3]}</i> :</p>
 					                		<div class="chartContainer" id="${timeNow}"></div>
 					                		<p class="note">Note: We assume no responsibility to data presented.</p>
 					            <div class="corner"></div>
 					            <span class="timelog" data-time=${timeNow}></span></div></div>
-	        				`).appendTo('#chat-messages');
+	        				`).appendTo(chatID);
 
 	        				createChart(value, timeNow);
 	        			}
 	        			else {
 	        				var latestchat = $(`
-					            <div class="message"><img src="static/logo.png" class='icon'/><div class="bubble">
+					            <div class="message"><img src=${icon(chatID)} class='icon'/><div class="bubble">
 					                		<p>${value}</p>
 					            <div class="corner"></div>
 					            <span class="timelog" data-time=${timeNow}></span></div></div>
-	        				`).appendTo('#chat-messages');
+	        				`).appendTo(chatID);
 	        			}
 	        			updateTimeLogs();
 	        		}
-	        		$('#chat-messages').animate({
-        				scrollTop: $('#chat-messages')[0].scrollHeight
+	        		$(chatID).animate({
+        				scrollTop: $(chatID)[0].scrollHeight
         			}, 400);
         		}, 1000*key);
         	});
@@ -186,23 +202,23 @@ $(document).ready(function(){
         }
     }
 
-	var send_message = function(e, displayinput = true){
-
+	var send_message = function(e, to, displayinput = true){
+		console.log(to);
 		e.preventDefault();
 		if ($('#loading').length) return;
 
 		timeNow = moment(new Date()).unix();
-        const input_message = $('#chatInput').val()
+        input_message = $('#chatInput').val()
 
         // clear the text input 
         $('#chatInput').val('')
-        submit_message(input_message)
+        submit_message(input_message, to)
         // return if the user does not enter any text
         if (!input_message) {
           return
         }
         if(displayinput){
-        	$('#chat-messages').append(`
+        	$(to).append(`
             <div class="message right">
                     <img class='icon' src="static/avatar.png" />
                     <div class="bubble">
@@ -218,17 +234,17 @@ $(document).ready(function(){
         // loading 
         var latestchat = $(`
             <div class="message" id="loading">
-                    <img class='icon' src="static/logo.png" />
+                    <img class='icon' src=${icon(to)} />
                     <div class="bubble">
                 		<b>...</b>
                 	<div class="corner"></div>
                         <span>typing</span>
                     </div>
             </div>
-        `).appendTo('#chat-messages');
+        `).appendTo(to);
 
-        $('#chat-messages').animate({
-        	scrollTop: $('#chat-messages')[0].scrollHeight
+        $(to).animate({
+        	scrollTop: $(to)[0].scrollHeight
         }, 1000);
 
         updateTimeLogs();
@@ -236,14 +252,14 @@ $(document).ready(function(){
     }
 
     $('#send').on('click', function(e){
-    	send_message(e)
+    	send_message(e, '#' + $('#sendmessage').data("tochat"));
     });
     $('#message_box').on('submit', function(e){
-    	send_message(e)
+    	send_message(e, '#' + $('#sendmessage').data("tochat"))
     });
 
     setInterval(updateTimeLogs, 4000);
 
-    createChart([1,2,3], "createChart");
+    //createChart([1,2,3], "createChart");
 
 });

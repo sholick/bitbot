@@ -31,6 +31,8 @@ p.italic{
 	margin-left:-260px;
 	min-height: 450px;
 	max-height: 90%;
+	border-radius: 10px;
+	overflow: hidden;
 }
 
 #friendslist{
@@ -41,8 +43,9 @@ p.italic{
 	height:100%;
 }
 #topmenu{
-	height:150px;
-	background: grey;
+	height:200px;
+	background: url("chatbot_cover2.jpg") 0 0 no-repeat;
+	background-size: 100% auto;
 	width:500px;
 	border-bottom:1px solid #d8dfe3;	
 }
@@ -179,7 +182,9 @@ p.italic{
 	font-weight:400;
 	font-size:11px;
 }
-#chat-messages{
+.chat-messages{
+	position:absolute;
+	display:none;
 	opacity:0;
 	margin-top:30px;
 	width:500px;
@@ -193,11 +198,11 @@ p.italic{
 	     -o-transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
 	        transition: all 200ms cubic-bezier(0.000, 0.995, 0.990, 1.000);
 }
-#chat-messages.animate{
+.chat-messages.animate{
 	opacity:1;
 	margin-top:0;
 }
-#chat-messages label{
+.chat-messages label{
 	color:#aab8c2;
 	font-weight:600;
 	font-size:12px;
@@ -218,26 +223,26 @@ div.message.right{
 	  margin-left: 19px;
 }
 
-#chat-messages div.message.not-last{
+.chat-messages div.message.not-last{
 	padding:0 0 10px 58px;
 	clear:both;
 	margin-bottom:0px;
 }
 
-#chat-messages .message img.icon{
+.chat-messages .message img.icon{
 	  float: left;
 	  margin-left: -38px;
 	  border-radius: 50%;
 	  width: 30px;
 	  margin-top: 12px;
 }
-#chat-messages div.message.right img.icon{
+.chat-messages div.message.right img.icon{
 	float: right;	
     margin-left: 0;
 	margin-right: -38px;	
 }
 
-#chat-messages .message h3{
+.chat-messages .message h3{
 	font-weight: bold;
 	font-size:16px;
 	line-height:30px;
@@ -259,7 +264,7 @@ div.message.right{
 	max-width:300px;
 	min-width:20px;
 }
-#chat-messages div.message.right .bubble{
+.chat-messages div.message.right .bubble{
 	float:right;
 	border-radius:5px 5px 0px 5px;
 	word-wrap: break-word;

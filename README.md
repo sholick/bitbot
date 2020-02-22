@@ -1,22 +1,23 @@
 ## CryptoBot - The cryptocurrency information assistant
-Cryptocurrency assistant that provides general crypto knowledge, basic price checking, bitcoin-related inquiries, and price-chart plotting functionality. momentum analysis and news providing features are coming.
+Cryptocurrency assistant that provides general crypto knowledge, basic price checking, bitcoin-related inquiries, and price-chart plotting functionality. Currently, the bot is coded to serve on web channels via an AWS instance. More dialogs and features are coming.
 
-More features coming soon!
+**See it in action!** [Click here](https://chanvictor.io)<br/>
+New features coming soon.
 <br/><br/>
-#### 1.0 **Current functionalities:**
-1. Crypto information retrieval
+#### 1.0 **Functionalities:**
+1. Cryptocurrency information retrieval
 2. Real-time Cryptocurrency price check (1000+ currencies)
 3. Price Chart plotting for certain period of time
 <br/><br/>
 #### 1.1 **Upcoming plans:**
-1. Google Assistant integration
+1. Integration with channels like Telegram and Google Assistant.
 2. Trade functionality on Binance using personal credentials
 3. Setting up price alert and watchlist
+4. Fetching latest news across different channels
 
-To receive dialogflow webhooks, you will need a working domain to receive and send the API calls.<br/>
-If you don't have one, try [ngrok.io](https://ngrok.io) for free.
+To receive and process dialogflow webhooks, you will need a working domain to receive and send the API calls.<br/>
+If you don't have one, try [ngrok.io](https://ngrok.io).
 
-**See it in action!** [Click here](https://chanvictor.io)<br/>
 
 **Setup Instructions**<br/>
 In order for this bot to function properly, you need to obtain an API key for both coingecko.com and coinmarketcap.com.

@@ -1,14 +1,14 @@
-# bitbot
-Cryptocurrency assistant that providing price checking, general crypto or bitcoin-related inquiries, and momentum analysis.
+## CryptoBot - The cryptocurrency information assistant
+Cryptocurrency assistant that provides general crypto knowledge, basic price checking, bitcoin-related inquiries, and price-chart plotting functionality. momentum analysis and news providing features are coming.
 
 More features coming soon!
 <br/><br/>
-**Current functionalities:**
+####**Current functionalities:**
 1. Crypto information retrieval
 2. Real-time Cryptocurrency price check (1000+ currencies)
 3. Price Chart plotting for certain period of time
 <br/><br/>
-**Upcoming plans:**
+####**Upcoming plans:**
 1. Google Assistant integration
 2. Trade functionality on Binance using personal credentials
 3. Setting up price alert and watchlist

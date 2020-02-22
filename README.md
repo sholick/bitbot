@@ -1,7 +1,7 @@
 ## CryptoBot - The cryptocurrency information assistant
 Cryptocurrency assistant that provides general crypto knowledge, basic price checking, bitcoin-related inquiries, and price-chart plotting functionality. Currently, the bot is coded to serve on web channels via an AWS instance. More dialogs and features are coming.
 
-**See it in action!** [Click here](https://chanvictor.io)<br/>
+**See it in action!** [Click here](https://chanvictor.io/bot)<br/>
 New features coming soon.
 <br/><br/>
 #### 1.0 **Functionalities:**
@@ -9,7 +9,7 @@ New features coming soon.
 2. Real-time Cryptocurrency price check (1000+ currencies)
 3. Price Chart plotting for certain period of time
 <br/><br/>
-#### 1.1 **Upcoming plans:**
+#### 1.1 **Functions in development:**
 1. Integration with channels like Telegram and Google Assistant.
 2. Trade functionality on Binance using personal credentials
 3. Setting up price alert and watchlist

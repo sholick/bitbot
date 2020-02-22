@@ -3,12 +3,12 @@ Cryptocurrency assistant that provides general crypto knowledge, basic price che
 
 More features coming soon!
 <br/><br/>
-####**Current functionalities:**
+#### 1.0 **Current functionalities:**
 1. Crypto information retrieval
 2. Real-time Cryptocurrency price check (1000+ currencies)
 3. Price Chart plotting for certain period of time
 <br/><br/>
-####**Upcoming plans:**
+#### 1.1 **Upcoming plans:**
 1. Google Assistant integration
 2. Trade functionality on Binance using personal credentials
 3. Setting up price alert and watchlist

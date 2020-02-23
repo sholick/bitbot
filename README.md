@@ -1,5 +1,5 @@
 ## CryptoBot - The cryptocurrency information assistant
-Cryptocurrency assistant that provides general crypto knowledge, basic price checking, bitcoin-related inquiries, and price-chart plotting functionality. Currently, the bot is coded to serve on web channels via an AWS instance. More dialogs and features are coming.
+Cryptocurrency assistant that provides general crypto knowledge, basic price checking, and price-chart plotting functionality. Currently, the bot is designed to serve on a server, be it a private hosted server or local host instance. In this code base, it is served on Amazon Web Services via Elasticbeanstalk. More dialogs and features are coming.
 
 **See it in action!** [Click here](https://chanvictor.io/bot)<br/>
 New features coming soon.
@@ -10,18 +10,24 @@ New features coming soon.
 3. Price Chart plotting for certain period of time
 <br/><br/>
 #### 1.1 **Functions in development:**
-1. Integration with channels like Telegram and Google Assistant.
+1. Implementation on other channels like Telegram and Google Assistant
 2. Trade functionality on Binance using personal credentials
-3. Setting up price alert and watchlist
-4. Fetching latest news across different channels
+3. Setting up price alert and  crypto watchlist
+4. Fetching latest news across different news sites, either through a scraping script by the server or relying on other news APIs
 
+
+#### Notes to a successful deployment
 To receive and process dialogflow webhooks, you will need a working domain to receive and send the API calls.<br/>
-If you don't have one, try [ngrok.io](https://ngrok.io).
+Due to Dialogflow's security requirements, this domain need to serve with HTTPS encryption.
+If you don't have one, try [ngrok.io](https://ngrok.io) when you start off.
 
 
 **Setup Instructions**<br/>
-In order for this bot to function properly, you need to obtain an API key for both coingecko.com and coinmarketcap.com.
-After doing so, you can place the API keys in the respective positions of the folder.
+To recieve data from crypto websites, you need to obtain an API key from both coingecko.com and coinmarketcap.com.<br/>
+After doing so, you can place the API keys in the respective positions of the folder.<br/>
+<br/>
+While Coingecko's API is free-to-use, Coinmarketcap's free plan is limited to 300 calls/day. To minimize the reliance on coinmarketcap and the possibility of running out of quota, this bot is coded to obtain API from coinmarketcap only when fetching the top coin list and individual coin's info. Fetching coin's price data and plotting price graph uses only coingecko API.
+
 
 You will need a dialogflow agent which handles the enquiries and forward requests to your webhook when needed.
 <br/><br/>

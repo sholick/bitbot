@@ -10,7 +10,7 @@ application = Flask(__name__)
 app = application
 dialogflow = dialogflow_v2
 
-CMC_key = "48ed09a4-e701-4524-883b-93962eb66652"
+CMC_key = "Your key here"
 CMC_symbols = []
 gecko_ids = []
 dur_dict = {
@@ -69,6 +69,10 @@ def priceChangeParser(number):
 		return "-"
 
 @app.route('/')
+def resume():
+	return render_template('intro.html')
+
+@app.route('/bot')
 def index():
 	return render_template('index.html')
 
@@ -269,8 +273,3 @@ def send_message():
     response_text = { "message":  fulfillment_messages }
 
     return jsonify(response_text), 200
-
-
-@app.route('/sholick')
-def resume():
-	return render_template('intro.html')

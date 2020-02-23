@@ -22,19 +22,21 @@ Due to Dialogflow's security requirements, this domain need to serve with HTTPS 
 If you don't have one, try [ngrok.io](https://ngrok.io) when you start off.
 
 
-**Setup Instructions**<br/>
+#### 2.0 **Setup Instructions**<br/>
 To recieve data from crypto websites, you need to obtain an API key from both coingecko.com and coinmarketcap.com.<br/>
 After doing so, you can place the API keys in the respective positions of the folder.<br/>
 <br/>
-While Coingecko's API is free-to-use, Coinmarketcap's free plan is limited to 300 calls/day. To minimize the reliance on coinmarketcap and the possibility of running out of quota, this bot is coded to obtain API from coinmarketcap only when fetching the top coin list and individual coin's info. Fetching coin's price data and plotting price graph uses only coingecko API.
+While Coingecko's API is free-to-use, Coinmarketcap's free plan is limited to 300 API calls/day. To minimize the reliance on coinmarketcap and the impact of running out of quota, this bot is coded to obtain info from Coinmarketcap only when fetching the coin list and individual coin's info. Functions like coin's current price and plotting coin price chart uses only coingecko API.<br/>
+If you have a Pro account or more than one key, feel free to add in your own.
 
 
 You will need a dialogflow agent which handles the enquiries and forward requests to your webhook when needed.
 <br/><br/>
-Diagflow agent linking:
+#### 2.1 Diagflow agent linking:
 1) Access keys has to be downloaded and placed into the main directory.
 2) GO to .env and change the name to your dialogflow key.json file
 <br/><br/>
-Javascript Libraries used:
+#### 2.2 Libraries used:
 1) Moment.js
 2) Chart.js
+3) font-awesome.css

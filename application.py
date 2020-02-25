@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from crypto_news_api import CryptoControlAPI
 import os
 import dialogflow_v2
 import requests
@@ -10,7 +11,11 @@ application = Flask(__name__)
 app = application
 dialogflow = dialogflow_v2
 
-CMC_key = "Your key here"
+
+news_api_key = "Your key here"
+news_api = CryptoControlAPI(news_api_key)
+
+CMC_key = "Your Key Here"
 CMC_symbols = []
 gecko_ids = []
 dur_dict = {
@@ -25,6 +30,15 @@ check_url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/map'
 meta_url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/info'
 price_url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
 
+cmc_params = {
+	'limit': 1000,
+	'sort': 'cmc_rank'
+}
+cmc_headers = {
+	'Accepts': 'application/json',
+	'X-CMC_PRO_API_KEY': CMC_key,
+}
+
 def cf(string):
 	return string.casefold()
 
@@ -33,7 +47,10 @@ def message_make(list):
 	for _str in list:
 		big_dict = {"text": {"text": [_str]}}
 		result.append(big_dict)
-	return result
+	inJson = {
+		"fulfillmentMessages": result
+	}
+	return inJson
 
 def get_ids_gecko():
 	#print("getting gecko ids")
@@ -42,11 +59,11 @@ def get_ids_gecko():
 	id_detail = json.loads(id_detail)
 	return id_detail
 
-def get_cmc_symbols(params, headers):
-	#print("getting CMC symbol")
+def get_cmc_symbols(params, headers):  # id, name symbol, slug
+
 	response = requests.get(check_url, params = params, headers=headers)
 	data = json.loads(response.text)
-	symbols = [str(i['id']) for i in data['data']]
+	symbols = [[str(i['id']), i['name'], i['symbol'], i['slug']] for i in data['data']]
 	return symbols
 
 def bigParser(number):
@@ -86,6 +103,8 @@ def switch_cases():
 
 	global gecko_ids, CMC_symbols
 	global check_url, meta_url, price_url
+	global cmc_params, cmc_headers
+	global news_api
 
 	data = request.get_json(silent=True)
 	intentName = data['queryResult']['intent']['displayName']
@@ -101,7 +120,7 @@ def switch_cases():
 			gecko_ids = get_ids_gecko()
 
 		found = []
-		#print("to Match: " + crypto)
+
 		for i in gecko_ids:
 			if cf(i['name']) == cf(crypto) or cf(i['symbol']) == cf(crypto) or cf(i['id']) == cf(crypto):
 				found.append(i)
@@ -112,7 +131,6 @@ def switch_cases():
 		else:
 			_id = found[0]['id']
 			string = 'http://api.coingecko.com/api/v3/simple/price?ids={0}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true'.format(_id)
-			#print(intentName)
 			price_detail = requests.get(string).text
 			price_detail = json.loads(price_detail)
 			response = """
@@ -131,7 +149,6 @@ def switch_cases():
 	elif intentName == "Graph":
 
 		if not len(gecko_ids):
-			#print("getting gecko ids")
 			gecko_ids = get_ids_gecko()
 
 		dur = '14'
@@ -141,10 +158,9 @@ def switch_cases():
 
 			if unit in dur_dict:
 				dur = str(math.ceil(int(dur) * dur_dict[unit]))
-		#print("duration found: " + dur)
 
 		found = []
-		#print("to Match: " + crypto)
+
 		for i in gecko_ids:
 			if cf(i['name']) == cf(crypto) or cf(i['symbol']) == cf(crypto) or cf(i['id']) == cf(crypto):
 				found.append(i)
@@ -170,23 +186,12 @@ def switch_cases():
 
 	elif intentName == "What_is_XX":
 
-		parameters = {
-			'limit': 1000,
-			'sort': 'cmc_rank'
-		}
-		headers = {
-			'Accepts': 'application/json',
-			'X-CMC_PRO_API_KEY': CMC_key,
-		}
+		if not len(CMC_symbols):
+			CMC_symbols = get_cmc_symbols(cmc_params, cmc_headers)
 
-		response = requests.get(check_url, params = parameters, headers=headers)
-		data = json.loads(response.text)
-		#print(data)
-		
 		found = []
-		#print(crypto)
-		for i in data['data']:
-			if cf(i['name']) == cf(crypto) or cf(i['symbol']) == cf(crypto) or cf(i['slug']) == cf(crypto):
+		for i in CMC_symbols:
+			if cf(i[1]) == cf(crypto) or cf(i[2]) == cf(crypto) or cf(i[3]) == cf(crypto):
 				found.append(i)
 
 		reply={
@@ -194,14 +199,14 @@ def switch_cases():
 			}
 
 		if found:
-			ids = ','.join(str(i['id']) for i in found)
-			#print(ids)
-			parameters.clear()
-			parameters['id'] = ids
-			response = requests.get(meta_url, params = parameters, headers=headers)
+			ids = ','.join(str(i[0]) for i in found)
+			parameters = {
+				'id': ids
+			}
+			response = requests.get(meta_url, params = parameters, headers = cmc_headers)
 			metadata = json.loads(response.text)
 			#print(metadata['data'])
-			crix = metadata['data'][str(found[0]['id'])]
+			crix = metadata['data'][str(found[0][0])]
 			
 			tech_doc = ""
 			if len(crix['urls']['technical_doc']):
@@ -210,10 +215,7 @@ def switch_cases():
 			line_2 = "Feel free to check out their <a href='{0}' target='_blank'>website</a>".format(crix['urls']['website'][0]) + tech_doc +  " for more in-depth information!"
 			_messages = message_make([line_1, line_2])
 
-			reply = {
-				#"fulfillmentText": "<h3>{1} <img class='crixlogo' src='{0}'' /></h3>{2}".format(crix['logo'], crix['name'], crix['description'])
-				"fulfillmentMessages": _messages
-			}
+			return jsonify(_messages)
 
 		return jsonify(reply)
 
@@ -223,27 +225,51 @@ def switch_cases():
 			'limit': 20,
 			'sort': 'cmc_rank'
 		}
-		headers = {
-			'Accepts': 'application/json',
-			'X-CMC_PRO_API_KEY': CMC_key,
-		}
 		if not len(CMC_symbols):
-			CMC_symbols = get_cmc_symbols(parameters, headers)
+			CMC_symbols = get_cmc_symbols(parameters, cmc_headers)
 
-		response = requests.get(meta_url, {'id': ','.join(CMC_symbols)}, headers=headers)
+		t_symbols = list(map(list, zip(*CMC_symbols)))[0]
+		response = requests.get(meta_url, {'id': ','.join(t_symbols)}, headers = cmc_headers)
 		metadata = json.loads(response.text)
 		metadata = metadata["data"]
 
 		line_1 = "The top 20 cryptocurrencies are as follows:<br/><br/>"
 		line_2 = "Type in one of the coin's name to know more!"
-		for i, _id in enumerate(CMC_symbols, 1):
+		for i, _id in enumerate(t_symbols, 1):
 			line_1 += '{0}.&nbsp;&nbsp;<img class="crixlogo" src= "{1}"/>{2}<br/>'.format(i, metadata[_id]["logo"], metadata[_id]["name"])
-		newmessage = message_make([line_1, line_2])
-		reply={
-			"fulfillmentMessages": newmessage
-		}
+		newMessage = message_make([line_1, line_2])
 
-		return jsonify(reply)
+		return jsonify(newMessage)
+
+
+	elif intentName == 'News':
+
+		if not len(crypto):
+			topNews = news_api.getTopNews("en")
+			toReturn = 'NeWs_!*_RanDOMEncodERx_!*__!*_'
+
+		else:
+			if not len(CMC_symbols):
+				CMC_symbols = get_cmc_symbols(cmc_params, cmc_headers)
+
+			found = []
+			for i in CMC_symbols:
+				if cf(i[1]) == cf(crypto) or cf(i[2]) == cf(crypto) or cf(i[3]) == cf(crypto):
+					found.append(i)
+
+			if found:
+				topNews = news_api.getTopNewsByCoin(found[0][3], 'en')
+				toReturn = 'NeWs_!*_RanDOMEncodERx_!*_' + crypto + '_!*_'
+
+		
+		for i in range(5):
+			toReturn = toReturn + topNews[i]['title'] + '</>' + topNews[i]['url'] + '</>' + topNews[i]['sourceDomain'] + '</>' + str(topNews[i]['words'] // 200) + '<!>'
+		
+		newMessage = message_make([toReturn])
+
+		return jsonify(newMessage)
+		
+
 
 
 def detect_intent_texts(project_name, session_id, text, language_code):
@@ -259,10 +285,9 @@ def detect_intent_texts(project_name, session_id, text, language_code):
        response = session_client.detect_intent(session=session, query_input=query_input)
 
        resp_list = [i.text.text[0] for i in response.query_result.fulfillment_messages]
-       #print(response.query_result.fulfillment_messages)
-       #print(response.query_result.fulfillment_messages[1])
-       #print(resp_list)
        return resp_list
+
+    return False
 
 @app.route('/send_message', methods=['POST'])
 def send_message():

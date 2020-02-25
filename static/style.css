@@ -34,7 +34,16 @@ p.italic{
 	border-radius: 10px;
 	overflow: hidden;
 }
-
+#topmenu h3{
+	padding:0px;
+	padding-top:10px;
+	font-size:20px;
+	color: white;
+	margin-bottom:5px;
+}
+#topmenu p{
+	margin-top:20px;
+}
 #friendslist{
 	position:absolute;
 	top:0;
@@ -43,11 +52,14 @@ p.italic{
 	height:100%;
 }
 #topmenu{
-	height:200px;
+	padding: 30px;
+	height: 120px;
 	background: url("chatbot_cover2.jpg") 0 0 no-repeat;
 	background-size: 100% auto;
 	width:500px;
-	border-bottom:1px solid #d8dfe3;	
+	border-bottom:1px solid #d8dfe3;
+	top: 0;
+	margin: 0;	
 }
 #topmenu span{
 	float:left;	
@@ -55,13 +67,20 @@ p.italic{
     height: 70px;
     background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/top-menu.png") -3px -118px no-repeat;
 }
+#topmenu i{
+	font-size: 20px;
+}
+#topmenu a{
+	color: #fff;
+	text-decoration: none;
+}
 #topmenu span.friends{margin-bottom:-1px;}
 #topmenu span.chats{background-position:-95px 25px; cursor:pointer;}
 #topmenu span.chats:hover{background-position:-95px -46px; cursor:pointer;}
 #topmenu span.history{background-position:-190px 24px; cursor:pointer;}
 #topmenu span.history:hover{background-position:-190px -47px; cursor:pointer;}
 .friend{
-	height:70px;
+	height:80px;
 	border-bottom:1px solid #e7ebee;		
 	position:relative;
 }
@@ -70,7 +89,7 @@ p.italic{
 	cursor:pointer;
 }
 .friend img{
-	width:40px;
+	width:50px;
 	border-radius:50%;
 	margin:15px;
 	float:left;
@@ -84,7 +103,7 @@ p.italic{
 	border:3px solid #fff;
 }
 .friend p{
-	padding:15px 0 0 0;			
+	padding:20px 0 0 0;			
 	float:left;
 	max-width:350px;
 }
@@ -105,8 +124,8 @@ p.italic{
 	width:9px;
 	height:9px;
 	position:absolute;
-	top:31px;
-	right:17px;
+	top:35px;
+	right:28px;
 }
 .friend .status.away{background:#ffce54;}
 .friend .status.inactive{background:#eaeef0;}
@@ -282,12 +301,12 @@ div.message.right .corner{
 	left:auto;
 	right:-5px;
 }
-.bubble span{
+.bubble span.timelog{
 	  color: #aab8c2;
 	  font-size: 11px;
-	  position: absolute;
 	  right: 0;
 	  bottom: -22px;
+	  position: absolute;
 }
 #sendmessage{
 	height:60px;
@@ -450,4 +469,8 @@ div#footnote{
 #footnote a{
 	text-decoration: none;
 	color: #8495a3;
+}
+span.notesRead{
+	font-size: 0.7em;
+	font-style: italic;
 }

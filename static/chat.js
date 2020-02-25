@@ -182,6 +182,26 @@ $(document).ready(function(){
 
 	        				createChart(value, timeNow);
 	        			}
+	        			else if (value.startsWith('NeWs_!*_RanDOMEncodERx_!*_')){
+	        				divided = value.split("_!*_")
+	        				value = divided[3].split('<!>');
+	        				if (divided[2] == "")
+	        					var latestchat = 'I found the following news:<br/><br/>';
+	        				else
+	        					var latestchat = 'I found the following news about <strong>' + divided[2] + '</strong>:<br/><br/>';
+	        				i = 0;
+	        				while (i!=value.length && i != 5){
+	        					fields = value[i].split('</>');
+	        					latestchat += `<p><a href="${fields[1]}" target="_blank">${fields[0]}</a><br/>${fields[2]}<br/><span class="notesRead">${fields[3]} min read</span><br/><br/></p>`
+	        					i++;
+	        				}
+	        				var toOutput = $(`
+					            <div class="message"><img src=${icon(chatID)} class='icon'/><div class="bubble">
+					                		${latestchat}
+					            <div class="corner"></div>
+					            <span class="timelog" data-time=${timeNow}></span></div></div>
+	        				`).appendTo(chatID);
+	        			}
 	        			else {
 	        				var latestchat = $(`
 					            <div class="message"><img src=${icon(chatID)} class='icon'/><div class="bubble">

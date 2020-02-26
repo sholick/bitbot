@@ -1,8 +1,10 @@
 ## CryptoBot - The cryptocurrency information assistant
 Cryptocurrency assistant that provides general crypto knowledge, basic price checking, and price-chart plotting functionality. Currently, the bot is designed to serve on a server, be it a private hosted server or local host instance. In this code base, it is served on Amazon Web Services via Elasticbeanstalk. More dialogs and features are coming.
-
-**See it in action!** [Click here](https://chanvictor.io/bot)<br/>
-New features coming soon.
+<br/><br/>
+**See it in action!** [Click here](https://chanvictor.io/bot)<br/><br/>
+New features added 25-Feb:<br/>
+News fetching - "Top News" intent to display 5 top news;<br/>
+"News for {coin_name}" intent to fetch news specifically for a particular coin.
 <br/><br/>
 #### 1.0 **Functionalities:**
 1. Cryptocurrency information retrieval

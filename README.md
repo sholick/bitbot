@@ -1,10 +1,10 @@
 ## CryptoBot - The cryptocurrency information assistant
-Cryptocurrency assistant that provides general crypto knowledge, basic price checking, and price-chart plotting functionality. Currently, the bot is designed to serve on a server, be it a private hosted server or local host instance. In this code base, it is served on Amazon Web Services via Elasticbeanstalk. More dialogs and features are coming.
+General purpose cryptocurrency chatbot that offers crypto knowledge, basic price checking, and price-chart plotting functions. Currently, the bot is designed to serve on a python server, be it a private hosted one or a local running instance. In the sample , it is served on Amazon Web Services via Elasticbeanstalk. We are adding more dialogs and features every week or so, so stay tuned!
 <br/><br/>
 **See it in action!** [Click here](https://chanvictor.io/bot)<br/><br/>
-New features added 25-Feb:<br/>
-News fetching - "Top News" intent to display 5 top news;<br/>
-"News for {coin_name}" intent to fetch news specifically for a particular coin.
+New features (25-Feb):<br/>
+"Top News" to display 5 top news in cryptocurrency;<br/>
+"News for {coin_name}" intent to fetch news for a specific coin.
 <br/><br/>
 #### 1.0 **Functionalities:**
 1. Cryptocurrency information retrieval
@@ -25,10 +25,13 @@ If you don't have one, try [ngrok.io](https://ngrok.io) when you start off.
 
 
 #### 2.0 **Setup Instructions**<br/>
-To recieve data from crypto websites, you need to obtain an API key from both coingecko.com and coinmarketcap.com.<br/>
-After doing so, you can place the API keys in the respective positions of the folder.<br/>
+1. Download the Dialogflow agent and deploy your agent using the zip file.<br/>
+2. Obtain API key for both [coingecko](coingecko.com) and [coinmarketcap](coinmarketcap.com).<br/>
+2.5 If you want news functionality you may also consider obtaining an API key from [cryptocontrol](https://cryptocontrol.io/).
+3. Place the API keys in the respective positions of the folder.<br/>
+4. Set the .env variables so the application can get the keys when using the intent. This should include the chatbot project name, bot access key file name, and the API keys.
 <br/>
-While Coingecko's API is free-to-use, Coinmarketcap's free plan is limited to 300 API calls/day. To minimize the reliance on coinmarketcap and the impact of running out of quota, this bot is coded to obtain info from Coinmarketcap only when fetching the coin list and individual coin's info. Functions like coin's current price and plotting coin price chart uses only coingecko API.<br/>
+Note: While Coingecko's API is free-to-use, Coinmarketcap's free plan is limited to 300 API calls/day. To minimize the reliance on coinmarketcap and the impact of running out of quota, this bot is coded to obtain info from Coinmarketcap only when fetching the coin list and individual coin's info. Functions like coin's current price and plotting coin price chart uses only coingecko API.<br/>
 If you have a Pro account or more than one key, feel free to add in your own.
 
 

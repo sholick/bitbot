@@ -27,9 +27,9 @@ If you don't have one, try [ngrok.io](https://ngrok.io) when you start off.
 #### 2.0 **Setup Instructions**<br/>
 1. Download the Dialogflow agent and deploy your agent using the zip file.<br/>
 2. Obtain API key for both [coingecko](coingecko.com) and [coinmarketcap](coinmarketcap.com).<br/>
-2.5 If you want news functionality you may also consider obtaining an API key from [cryptocontrol](https://cryptocontrol.io/).
-3. Place the API keys in the respective positions of the folder.<br/>
-4. Set the .env variables so the application can get the keys when using the intent. This should include the chatbot project name, bot access key file name, and the API keys.
+3. If you want news functionality you may also consider obtaining an API key from [cryptocontrol](https://cryptocontrol.io/).
+4. Place the API keys in the respective positions of the folder.<br/>
+5. Set the .env variables so the application can get the keys when using the intent. This should include the chatbot project name, bot access key file name, and the API keys.
 <br/>
 Note: While Coingecko's API is free-to-use, Coinmarketcap's free plan is limited to 300 API calls/day. To minimize the reliance on coinmarketcap and the impact of running out of quota, this bot is coded to obtain info from Coinmarketcap only when fetching the coin list and individual coin's info. Functions like coin's current price and plotting coin price chart uses only coingecko API.<br/>
 If you have a Pro account or more than one key, feel free to add in your own.

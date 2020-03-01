@@ -14,7 +14,7 @@ New features (25-Feb):<br/>
 #### 1.1 **Functions in development:**
 1. Implementation on other channels like Telegram and Google Assistant
 2. Trade functionality on Binance using personal credentials
-3. Setting up price alert and  crypto watchlist
+3. Setting up price alert and crypto watchlist
 4. ~~Fetching latest news across different news sites, either through a scraping script by the server or relying on other news APIs~~
 
 
@@ -38,8 +38,9 @@ If you have a Pro account or more than one key, feel free to add in your own.
 You will need a dialogflow agent which handles the enquiries and forward requests to your webhook when needed.
 <br/><br/>
 #### 2.1 Diagflow agent linking:
-1) Access keys has to be downloaded and placed into the main directory.
-2) GO to .env and change the name to your dialogflow key.json file
+1) Import the agent zip file
+2) Access keys has to be downloaded and placed into the main directory.
+3) GO to .env and change the name to your dialogflow key.json file
 <br/><br/>
 #### 2.2 Libraries used:
 1) Moment.js

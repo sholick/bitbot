@@ -11,6 +11,9 @@ New features (25-Feb):<br/>
 2. Real-time Cryptocurrency price check (1000+ currencies)
 3. Price Chart plotting for certain period of time
 <br/><br/>
+![Image1](screenshots/screenshot1.PNG)
+![Image2](screenshots/screenshot2.PNG)
+
 #### 1.1 **Functions in development:**
 1. Implementation on other channels like Telegram and Google Assistant
 2. Trade functionality on Binance using personal credentials
@@ -22,7 +25,6 @@ New features (25-Feb):<br/>
 To receive and process dialogflow webhooks, you will need a working domain to receive and send the API calls.<br/>
 Due to Dialogflow's security requirements, this domain need to serve with HTTPS encryption.
 If you don't have one, try [ngrok.io](https://ngrok.io) when you start off.
-
 
 #### 2.0 **Setup Instructions**<br/>
 1. Download the Dialogflow agent and deploy your agent using the zip file.<br/>

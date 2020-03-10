@@ -18,6 +18,7 @@ New features (25-Feb):<br/>
 1. Implementation on other channels like Telegram and Google Assistant
 2. Trade functionality on Binance using personal credentials
 3. Setting up price alert and crypto watchlist
+4. Vocal recognition capability (via speech-to-text)
 4. ~~Fetching latest news across different news sites, either through a scraping script by the server or relying on other news APIs~~
 
 

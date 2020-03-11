@@ -474,3 +474,14 @@ span.notesRead{
 	font-size: 0.7em;
 	font-style: italic;
 }
+
+.show{
+	opacity: 1;
+	display:block;
+	transition: opacity 500ms;
+}
+
+.hide{
+	opacity: 0;
+	transition: opacity 500ms;
+}

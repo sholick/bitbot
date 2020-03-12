@@ -26,7 +26,7 @@ moment.updateLocale('en', {
 	}
 })
 
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function(event) { 
 
 	var started = {
 		c001: false,
@@ -39,12 +39,13 @@ $(document).ready(function(){
   	var preloadbg = document.createElement("img");
   	preloadbg.src = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/timeline1.png";
   
-	$("#searchfield").focus(function(){
+	searchField = document.getElementById("searchfield");
+	searchField.addEventListener('focusin', (event) => {
 		if($(this).val() == "Search contacts..."){
 			$(this).val("");
 		}
 	});
-	$("#searchfield").focusout(function(){
+	searchField.addEventListener('focusout', (event) => {
 		if($(this).val() == ""){
 			$(this).val("Search contacts...");
 			
@@ -80,121 +81,89 @@ $(document).ready(function(){
 				submit_message("Hi", "#" + chatID);
 				started[chatID] = true;
 			}
-			else submit_message("I am back, '#" + chatID);
+			else submit_message("I am back", "#" + chatID);
 
 			var childOffset = element.offsetTop;
 			var parentOffset = element.parentElement.parentElement.offsetTop;
 			var childTop = childOffset - parentOffset;
-			var clone = Object.assign({}, element.find('img')[0]);
-			car top = childTop + 12 + "px";
+			var clone = element.getElementsByTagName('img')[0].cloneNode(true);
+			var top = childTop + 12 + "px";
+			var cxcy = document.querySelectorAll('.cx, .cy');
+			var oldstuff = document.querySelectorAll('.done');
+
 			clone.style.top = top;
 			clone.classList.add("floatingImg");
 			document.getElementById("chatbox").appendChild(clone);
 
+			oldstuff.forEach(element =>{
+				element.parentNode.removeChild(element);
+			})
+
 			setTimeout(function(){
-				var profile = document.getElementbyId("profile");
+				clone.style.top = null;
+				clone.classList.add("animate");
+				var profile = document.getElementById("profile");
 				profile.getElementsByTagName("p")[0].classList.add("animate");
 				profile.classList.add("animate");
 			}, 100);
 
 			setTimeout(function(){
-				document.getElementById("chatID").classList.add("animate");
-				var cxcy = document.getElementsByClassName('cx cy');
-				cxcy.classList.add('s1');
-				setTimeout(function(){
-					cxcy.classList.add('s2');
-				}, 100);
-				setTimeout(function(){
-					cxcy.classList.add('s3');
-				}, 200);			
+				document.getElementById(chatID).classList.add("animate");
+				cxcy.forEach(element => {
+					element.classList.add('s1');
+					setTimeout(function(){
+						element.classList.add('s2');
+					}, 100);
+					setTimeout(function(){
+						element.classList.add('s3');
+					}, 200);
+				});			
 			}, 150);
 
-			Document.getElementsByClassName('floatingImg')[0].animate([
-				{ transform: "scaleX(2)"},
-				{ transform: "scaleY(2)"},
-				{ transfrom: "translate(197px, 20px)"},
-			], {
-				duration: 200,
-				iterations: 1
-			});
+			var name = element.getElementsByTagName("p")[0].getElementsByTagName("strong")[0].innerHTML;
+			var email = element.getElementsByTagName("p")[0].getElementsByTagName("span")[0].innerHTML;
+			var chatview = document.getElementById('chatview');
+			var friendsList = document.getElementById('friendslist');
+			var chatMessages = document.querySelectorAll('.chat-messages');
 
-			var name = element.find("p strong").innerHTML;
-			var email = element.find("p span").innerHTML;
-
-			profile.getElementsByTagName("p").innerHTML = name;
-			profile.getElementsByTagName("span").innerHTML = email;
+			profile.getElementsByTagName("p")[0].innerHTML = name;
+			profile.getElementsByTagName("span")[0].innerHTML = email;
 			document.getElementById("sendmessage").dataset.tochat = chatID;
 
-			document.getElementsByClassName('chat-messages').style.display = "none";
-			document.getElementById('friendslist').classList.add('hide');
-			document.getElementById('chatview').classList.add('show');
+			chatMessages.forEach(element => {
+				if (element.id != chatID)
+					element.style.display = "none";
+				else
+					element.style.display = "block";
+			});
+
+			//document.getElementsByClassName('chat-messages')[0].style.display = "none";
+			friendsList.classList.add('hide');
+			chatview.classList.remove('hide');
+			chatview.classList.add('show');
 			document.getElementById(chatID).classList.add('show');
-		});
-	});
-	$(".friend").each(function(){		
-		$(this).click(function(){
 
-
-			var id_to_display = $(this).data('chatid');
-
-			if (! started[id_to_display]){
-				submit_message("Hi", '#' + id_to_display);
-				started[id_to_display] = true;
-			}
-			else submit_message("I am back", '#' + id_to_display);
-
-			var childOffset = $(this).offset();
-			var parentOffset = $(this).parent().parent().offset();
-			var childTop = childOffset.top - parentOffset.top;
-			var clone = $(this).find('img').eq(0).clone();
-			var top = childTop+12+"px";
-			console.log(id_to_display);
-			
-			$(clone).css({'top': top}).addClass("floatingImg").appendTo("#chatbox");									
-			
-			setTimeout(function(){$("#profile p").addClass("animate");$("#profile").addClass("animate");}, 100);
-			setTimeout(function(){
-				$("#" + id_to_display).addClass("animate");
-				$('.cx, .cy').addClass('s1');
-				setTimeout(function(){$('.cx, .cy').addClass('s2');}, 100);
-				setTimeout(function(){$('.cx, .cy').addClass('s3');}, 200);			
-			}, 150);														
-			
-			$('.floatingImg').animate({
-				'width': "100px",
-				'left':'197px',
-				'top':'20px'
-			}, 200);
-			
-			var name = $(this).find("p strong").html();
-			var email = $(this).find("p span").html();
-																	
-			$("#profile p").html(name);
-			$("#profile span").html(email);
-			$('#sendmessage').data("tochat", id_to_display);			
-			
-			//$(".message").not(".right").find("img").attr("src", $(clone).attr("src"));
-			$('.chat-messages').hide();									
-			$('#friendslist').fadeOut();
-			$('#chatview').fadeIn();
-			$('#' + id_to_display).fadeIn();
-		
-			
-			$('#close').unbind("click").click(function(){				
-				$(".chat-messages, #profile, #profile p").removeClass("animate");
-				$('.cx, .cy').removeClass("s1 s2 s3");
-				$('.floatingImg').animate({
-					'width': "40px",
-					'top':top,
-					'left': '12px'
-				}, 200, function(){$('.floatingImg').remove()});				
+			document.getElementById("close").addEventListener('click', (event) => {
+				event.preventDefault;
+				//document.getElementsByClassName('chat-messages')[0].classList.remove("animate");
+				//document.getElementsByClassName('chat-messages')[0].classList.add("hide");
+				clone.classList.remove("animate");
+				clone.classList.add("done");
+				clone.style.top = top;
+				//clone.parentNode.removeChild(clone);
+				profile.classList.remove("animate");
+				profile.getElementsByTagName("p")[0].classList.remove("animate");
+				cxcy.forEach( element => {
+					element.classList.remove("s1","s2","s3");
+				});		
 				
 				setTimeout(function(){
-					$('#chatview').fadeOut();
-					$('#friendslist').fadeIn();				
+					chatview.classList.remove("show")
+					chatview.classList.add("hide");
+					friendsList.classList.remove("hide")
+					friendsList.classList.add("show");			
 				}, 50);
 			});
-			
 		});
 	});
 
@@ -205,7 +174,8 @@ $(document).ready(function(){
 
 	function submit_message(message, chatID) {
 
-
+		console.log(message);
+		console.log(chatID);
         $.post( "/send_message", {message: message, to : chatID.substr(1)}, handle_response);
 
         function handle_response(data) {
@@ -296,12 +266,10 @@ $(document).ready(function(){
 		if ($('#loading').length) return;
 
 		timeNow = moment(new Date()).unix();
-        input_message = $('#chatInput').val()
+        input_message = $('#chatInput').val();
 
-        // clear the text input 
-        $('#chatInput').val('')
-        submit_message(input_message, to)
-        // return if the user does not enter any text
+        $('#chatInput').val('');
+        submit_message(input_message, to);
         if (!input_message) {
           return
         }
@@ -317,9 +285,7 @@ $(document).ready(function(){
             </div>
         `)
         }
-        
 
-        // loading 
         var latestchat = $(`
             <div class="message" id="loading">
                     <img class='icon' src=${icon(to)} />
@@ -338,8 +304,7 @@ $(document).ready(function(){
         updateTimeLogs();
 
     }
-
-    $('#send').on('click', function(e){
+    document.getElementById("send").addEventListener('click', (event) => {
     	send_message(e, '#' + $('#sendmessage').data("tochat"));
     });
     $('#message_box').on('submit', function(e){
@@ -348,6 +313,5 @@ $(document).ready(function(){
 
     setInterval(updateTimeLogs, 4000);
 
-    //createChart([1,2,3], "createChart");
 
 });

@@ -2,11 +2,15 @@
 
 var chartCount = 0;
 
-function createConfig(dataList) {
+function createConfig(dataList, labels = null) {
 
 	var max = Math.max(...dataList);
   var min = Math.min(...dataList);
-  var indexes = Array.from(dataList, i => dataList.indexOf(i))
+  if (!labels) {
+    var indexes = Array.from(dataList, i => dataList.indexOf(i))
+  } else {
+    var indexes = labels
+  }
   return {
       type: 'line',
       data: {
@@ -23,18 +27,20 @@ function createConfig(dataList) {
           }]
           },
       options: {
+          maintainAspectRatio: false,
           scales: {
               xAxes: [{
-                display: false,
+                display: (labels ? true : false),
                 gridLines: {
                   display: true,
                   drawBorder: true,
                   drawOnChartArea: false,
                 },
                 ticks: {
+                  autoskip: true,
+                  autoSkipPadding: 70,
                   callback: function(dataLabel, index) {
-                    // Hide the label of every 2nd dataset. return null to hide the grid line too
-                    return index % 2 === 0 ? dataLabel : '';
+                    return index % 2 === 0 ? labels? dataLabel.format('DD MMM') : dataLabel : '';
                   }
                 }
               }],
@@ -51,7 +57,22 @@ function createConfig(dataList) {
             xPadding: 20,
             bodyFontSize: 10,
             callbacks:{
-              title: function(){},
+              //title: function(item, data){
+                //if (labels){
+                  //var label = data.datasets[item.datasetIndex] || '';
+                  //label += moment(item.xLabel).format('DD MMM HH:mm');
+                  //return "gg";
+                //}
+              //},
+              //title: function(item, data){
+                //if (! labels) return;
+               // else{
+                //  return data.datasets[item.datasetIndex] || '';
+                //}
+                //var title = data.datasets[item.datasetIndex].title || '';
+                //if (labels) title = label + '' + item.xLabel.format('DD MMM HH:mm');
+                //return title;
+              //},
               label: function(item, data){
                 var label = data.datasets[item.datasetIndex].label || '';
                 if (label) label +=': ';
@@ -71,18 +92,30 @@ function createChart(dataList, id){
 
         chartCount += 1;
         var box = document.getElementById(id);
-        //var div = document.createElement('div');
-        //div.classList.add('chartContainer');
 
         var canvas = document.createElement('canvas');
         canvas.id = "_Chart_" + id;
         canvas.width = "300";
         canvas.height = "230";
-        //div.appendChild(canvas);
         box.appendChild(canvas);
 
         var ctx = canvas.getContext('2d');
         var config = createConfig(dataList);
+        new Chart(ctx, config);
+        
+}
+
+function createPageChart(dataList, labels = null){
+
+        var area = document.getElementById("chartArea");
+        var canvas = document.createElement('canvas');
+        canvas.id = "_Chart_";
+        canvas.width = "600";
+        canvas.height = "400";
+        area.appendChild(canvas);
+
+        var ctx = canvas.getContext('2d');
+        var config = createConfig(dataList, labels);
         new Chart(ctx, config);
         
 }

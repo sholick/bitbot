@@ -1,5 +1,6 @@
  <!-- /templates/intro.html -->
 <head>
+  <title>Victor.io</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet">
   <link href="https://use.typekit.net/qrg0pyh.css" rel="stylesheet">
   <style>
@@ -155,7 +156,9 @@ div.content p.end{
 #cuhkblock{
   background: url("{{ url_for('static', filename='final_cuhk.png') }}") no-repeat;
 }
-
+#beablock{
+  background: url("{{ url_for('static', filename='final_bea.jpg') }}") no-repeat;
+}
 #botblock{
   background: url("{{ url_for('static', filename='final_bot.jpg') }}") no-repeat;
   background-size: cover;
@@ -218,6 +221,16 @@ div.content p.end{
         Work
       </h3>
     <div class="_row">
+      <a href="http://www.beahkusu.hkusu.hku.hk/bea2013/" target="_blank">
+      <div class="workblock" id="beablock">
+        <svg width="200" height="200">
+            <line class="top" x1="0" y1="0" x2="600" y2="0"/>
+            <line class="left" x1="0" y1="200" x2="0" y2="-400"/>
+            <line class="bottom" x1="200" y1="200" x2="-400" y2="200"/>
+            <line class="right" x1="200" y1="0" x2="200" y2="600"/>
+        </svg>
+      </div>
+    </a>
     <a href="http://www2.bschool.cuhk.edu.hk/program/undergraduate/" target="_blank">
       <div class="workblock" id="cuhkblock">
         <svg width="200" height="200">
@@ -228,7 +241,7 @@ div.content p.end{
         </svg>
       </div>
     </a>
-    <a href="https://chanvictor.io" target="_blank">
+    <a href="https://chanvictor.io/bot" target="_blank">
       <div class="workblock" id="botblock">
         <svg width="200" height="200">
             <line class="top" x1="0" y1="0" x2="600" y2="0"/>
@@ -251,10 +264,13 @@ div.content p.end{
     </div>
     <div class="_row _notes">
       <p>
+       Early project
+      </p>
+      <p>
        Developer team
       </p>
       <p>
-       My own Project
+       Personal project
       </p>
       <p>
        Developer team

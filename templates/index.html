@@ -3,6 +3,9 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <title>CryptoBot - The chatbot for Cryptocurrency Info</title>
+        <link rel="icon" href="{{ url_for('static', filename='icon.ico') }}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
         <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
     </head>
@@ -10,53 +13,29 @@
         <div id="chatbox">
             <div id="friendslist">
                 <div id="topmenu">
-                    <span class="friends"></span>
+                    <h3>Crypto Assistant</h3>
+                    <a href="https://github.com/sholick/bitbot" target="_blank"><i class="fab fa-github fa-4x"></i></a>
+                    <p>Powered by <a href="https://coinmarketcap.com" target="_blank">Coinmarketcap</a> and <a href="https://coingecko.com" target="_blank">Coingecko</a> API<br/>Last updated: 13 Mar 2020
+                    </p>
                 </div>
                 
                 <div id="friends">
-                    <div class="friend">
+                    <div class="friend" data-chatid="c001">
                         <img src="{{ url_for('static', filename='logo.png') }}" />
                         <p>
-                            <strong>Bitbot</strong><br/>
-                            <span>The cryptocurrency info bot.</span>
+                            <strong>Crypto Bot</strong><br/>
+                            <span>The cryptocurrency info chatbot</span>
                         </p>
                         <div class="status available"></div>
                     </div>
                     
-                    <div class="friend">
-                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/2_copy.jpg" />
+                    <div class="friend" data-chatid="c002">
+                        <img src="{{ url_for('static', filename='myAvatar.png') }}" />
                         <p>
-                            <strong>Martin Joseph</strong>
-                            <span>marjoseph@gmail.com</span>
+                            <strong>Victor</strong><br/>
+                            <span>Meet the developer</span>
                         </p>
-                        <div class="status away"></div>
-                    </div>
-                    
-                    <div class="friend">
-                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/3_copy.jpg" />
-                        <p>
-                            <strong>Tomas Kennedy</strong>
-                            <span>tomaskennedy@gmail.com</span>
-                        </p>
-                        <div class="status inactive"></div>
-                    </div>
-                    
-                    <div class="friend">
-                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/4_copy.jpg" />
-                        <p>
-                            <strong>Enrique Sutton</strong>
-                            <span>enriquesutton@gmail.com</span>
-                        </p>
-                        <div class="status inactive"></div>
-                    </div>
-                    
-                    <div class="friend">
-                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/5_copy.jpg" />
-                        <p>
-                        <strong>    Darnell Strickland</strong>
-                            <span>darnellstrickland@gmail.com</span>
-                        </p>
-                        <div class="status inactive"></div>
+                        <div class="status available"></div>
                     </div>
                     
                     <div id="search">
@@ -67,7 +46,7 @@
                 
             </div>  
             
-            <div id="chatview" class="p1">      
+            <div id="chatview" class="p1 hide">      
                 <div id="profile">
 
                     <div id="close">
@@ -75,13 +54,12 @@
                         <div class="cx"></div>
                     </div>
                     
-                    <p>Miro Badev</p>
-                    <span>miro@badev@gmail.com</span>
+                    <p>Name</p>
+                    <span>discription</span>
                 </div>
-                <div id="chat-messages">
+
+                <div class="chat-messages" id="c001">
                     <label id="dateIndicator"></label>
-    
-                    
                     <div class="message right">
                         <img class="icon" src="{{ url_for('static', filename='avatar.png')}}" />
                         <div class="bubble">
@@ -90,10 +68,21 @@
                             <span></span>
                         </div>
                     </div>
-                    
+                </div>
+
+                <div class="chat-messages" id="c002">
+                    <label id="dateIndicator"></label>
+                    <div class="message right">
+                        <img class="icon" src="{{ url_for('static', filename='avatar.png')}}" />
+                        <div class="bubble">
+                            <p class='italic'>gets in...</p>
+                            <div class="corner"></div>
+                            <span></span>
+                        </div>
+                    </div>
                 </div>
                 
-                <div id="sendmessage">
+                <div id="sendmessage" data-tochat="">
                     <form id='message_box'>
                         <input type="text" id="chatInput" placeholder="Send message..." />
                         <input type="submit" hidden/>
@@ -106,11 +95,11 @@
             <p>Powered by <a href="https://coinmarketcap.com" target="_blank">Coinmarketcap</a> and <a href="https://coingecko.com" target="_blank">Coingecko</a></p>
             </div>     
         </div>  
-            
+        
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script src="{{ url_for('static', filename='chart.min.js')}}"></script>
         <script src="{{ url_for('static', filename='chart_utils.js')}}"></script>
         <script src="{{ url_for('static', filename='moment.min.js')}}"></script>
-        <script src="{{ url_for('static', filename='chat.js')}}"></script>
+        <script src="{{ url_for('static', filename='chat_purejs.js')}}"></script>
     </body>
 </html>

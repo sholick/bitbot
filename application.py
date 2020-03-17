@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, abort
 from crypto_news_api import CryptoControlAPI
 import os
 import dialogflow_v2
@@ -6,6 +6,9 @@ import requests
 import json
 import pusher
 import math
+import sqlite3
+import random
+import string
 
 application = Flask(__name__)
 app = application
@@ -15,7 +18,7 @@ dialogflow = dialogflow_v2
 news_api_key = "Your key here"
 news_api = CryptoControlAPI(news_api_key)
 
-CMC_key = "Your Key Here"
+CMC_key = "Your key here"
 CMC_symbols = []
 gecko_ids = []
 dur_dict = {
@@ -39,8 +42,8 @@ cmc_headers = {
 	'X-CMC_PRO_API_KEY': CMC_key,
 }
 
-def cf(string):
-	return string.casefold()
+def cf(text):
+	return text.casefold()
 
 def message_make(list):
 	result = []
@@ -53,13 +56,13 @@ def message_make(list):
 	return inJson
 
 def get_ids_gecko():
-	#print("getting gecko ids")
+
 	get_id = 'http://api.coingecko.com/api/v3/coins/list'
 	id_detail = requests.get(get_id).text
 	id_detail = json.loads(id_detail)
 	return id_detail
 
-def get_cmc_symbols(params, headers):  # id, name symbol, slug
+def get_cmc_symbols(params, headers):
 
 	response = requests.get(check_url, params = params, headers=headers)
 	data = json.loads(response.text)
@@ -130,8 +133,8 @@ def switch_cases():
 
 		else:
 			_id = found[0]['id']
-			string = 'http://api.coingecko.com/api/v3/simple/price?ids={0}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true'.format(_id)
-			price_detail = requests.get(string).text
+			link = 'http://api.coingecko.com/api/v3/simple/price?ids={0}&vs_currencies=usd&include_24hr_change=true&include_24hr_vol=true'.format(_id)
+			price_detail = requests.get(link).text
 			price_detail = json.loads(price_detail)
 			response = """
 				<strong>{0}</strong><br>
@@ -172,12 +175,25 @@ def switch_cases():
 			return jsonify(reply)
 
 		else:
-			string = 'http://api.coingecko.com/api/v3/coins/{0}/market_chart?vs_currency=usd&days={1}'.format(found[0]['id'], dur)
-			price_detail = requests.get(string).text
+			link = 'http://api.coingecko.com/api/v3/coins/{0}/market_chart?vs_currency=usd&days={1}'.format(found[0]['id'], dur)
+			price_detail = requests.get(link).text
 			price_detail = json.loads(price_detail)
 
+			code = 'c' + ''.join([random.choice(string.ascii_letters + string.digits) for n in range(7)])
+			print(code)
+			con_charts = sqlite3.connect('charts.db')
+			c = con_charts.cursor()
+
+			inserts = [(i[0], i[1]) for i in price_detail['prices']]
+
+			c.execute('CREATE TABLE ' + code + '(date integer, price integer)')
+			c.executemany('INSERT INTO ' + code + ' VALUES (?,?)', inserts)
+			con_charts.commit()
+			con_charts.close()
+			
+
 			priceList = [i[1] for i in price_detail['prices']]
-			priceString = 'Chart__PloT__' + crypto + '__' + dur + ' day(s)__' + ','.join([str(i) for i in priceList])
+			priceString = 'Chart__PloT__' + crypto + '__' + dur + ' day(s)__' + code + '__' + ','.join([str(i) for i in priceList])
 			reply={
 				"fulfillmentText": priceString
 			}
@@ -221,14 +237,10 @@ def switch_cases():
 
 	elif intentName == 'List':
 
-		parameters = {
-			'limit': 20,
-			'sort': 'cmc_rank'
-		}
 		if not len(CMC_symbols):
-			CMC_symbols = get_cmc_symbols(parameters, cmc_headers)
+			CMC_symbols = get_cmc_symbols(cmc_params, cmc_headers)
 
-		t_symbols = list(map(list, zip(*CMC_symbols)))[0]
+		t_symbols = list(map(list, zip(*CMC_symbols)))[0][:20]
 		response = requests.get(meta_url, {'id': ','.join(t_symbols)}, headers = cmc_headers)
 		metadata = json.loads(response.text)
 		metadata = metadata["data"]
@@ -298,3 +310,29 @@ def send_message():
     response_text = { "message":  fulfillment_messages }
 
     return jsonify(response_text), 200
+
+@app.route('/chart/<code>')
+def chartPage(code):
+
+	con_charts = sqlite3.connect('charts.db')
+	c = con_charts.cursor()
+	command = "SELECT * FROM " + code
+	try:
+		data = c.execute(command)
+	except sqlite3.OperationalError:
+		abort(404)
+
+	_list = []
+	_labels = []
+	for i in data:
+		_list.append(str(i[1]))
+		_labels.append(str(i[0]))
+
+	_times = ','.join(_labels)
+	_values = ','.join(_list)
+
+	return render_template("chart.html", chartData = _times + '<?>' + _values)
+
+@app.errorhandler(404)
+def page_not_found(error):
+   return render_template('404.html', title = '404'), 404
